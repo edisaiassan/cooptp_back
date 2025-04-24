@@ -1,7 +1,7 @@
 ###
-POST http://localhost:3000/delete-folders
+POST https://cooptpbackend.onrender.com/delete-images
 Content-Type: application/json
 
 {
-  "folders": ["presentation/OIWQF0kkg6Tszq6JzsRW"]
+  "id": ["presentation/sbia6gwsfqknxsd7r2b3"]
 }

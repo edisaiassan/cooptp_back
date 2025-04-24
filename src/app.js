@@ -6,20 +6,35 @@ import cors from 'cors'
 dotenv.config()
 
 const app = express()
+
+// CORS configurado para desarrollo y producción
+const allowedOrigins = [
+    'http://localhost:5173',
+    'https://cooperativatp.netlify.app'
+]
+
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: function (origin, callback) {
+        // Permitir solicitudes sin origen (por ejemplo desde Postman)
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
+    },
     methods: ['GET', 'POST', 'DELETE'],
 }))
+
 app.use(express.json())
 
-// Cloudinary config
+// Configuración de Cloudinary
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
-//Delete cloudinary publicId
+// Ruta para eliminar imágenes por publicId
 app.post("/delete-images", async (req, res) => {
     const { id } = req.body
 
@@ -40,7 +55,7 @@ app.post("/delete-images", async (req, res) => {
     }
 })
 
-// Eliminar carpetas por nombres
+// Ruta para eliminar carpetas por nombre
 app.post('/delete-folders', async (req, res) => {
     const { folders } = req.body
 
